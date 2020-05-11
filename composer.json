@@ -1,0 +1,12 @@
+{
+    "name": "divejusty/chelona",
+    "description": "Chelona PHP Framework",
+    "type": "Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Justin Wies"
+        }
+    ],
+    "require": {}
+}

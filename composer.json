@@ -1,7 +1,6 @@
 {
     "name": "divejusty/chelona",
     "description": "Chelona PHP Framework",
-    "type": "Library",
     "license": "MIT",
     "authors": [
         {
@@ -13,5 +12,11 @@
 			"Chelona\\": "src/Chelona"
         }
 	},
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+	},
+	"scripts": {
+		"test": "./vendor/bin/phpunit tests"
+	}
 }

@@ -2,16 +2,34 @@
 
 namespace Chelona;
 
+/**
+ * Handles different response types
+ */
 class Response
 {
-	public static function json($data)
+	/**
+	 * Sends JSON data
+	 *
+	 * @param array $data
+	 *
+	 * @return void
+	 */
+	public static function json($data): void
 	{
+		// TODO: see if this can be extracted
 		header('Content-Type: application/json');
 
 		echo json_encode($data);
 	}
 
-	public static function plain($data) // TODO: Rename?
+	/**
+	 * Sends plain text
+	 *
+	 * @param mixed $data
+	 *
+	 * @return void
+	 */
+	public static function plain($data): void // TODO: Rename?
 	{
 		print($data);
 	}

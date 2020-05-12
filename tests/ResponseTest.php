@@ -12,14 +12,16 @@ final class ResponseTest extends TestCase
 		Response::plain('foo');
 	}
 
-	// Doesn't work as of yet, due to header side effect
-	// public function testResponseDataCanBeJson(): void
-	// {
-	// 	// Data - look into proper faking
-	// 	$foo['bar'] = 'baz';
+	/**
+     * @runInSeparateProcess
+     */
+	public function testResponseDataCanBeJson(): void
+	{
+		// Data - look into proper faking
+		$foo['bar'] = 'baz';
 
-	// 	// Check headers?
-	// 	$this->expectOutputString(json_encode($foo));
-	// 	Response::json(json_encode($foo));
-	// }
+		// Check headers?
+		Response::json($foo);
+		$this->assertJsonStringEqualsJsonString(json_encode($foo), $this->getActualOutput());
+	}
 }

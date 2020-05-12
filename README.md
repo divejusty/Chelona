@@ -1,2 +1,2 @@
 # Chelona
-Toy PHP Framework
+Chelona is a lightweight PHP framework.

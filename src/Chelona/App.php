@@ -2,36 +2,40 @@
 
 namespace Chelona;
 
+/**
+ * Storage class for app variables and constants
+ */
 class App
 {
 	/**
-	 * Undocumented variable
+	 * The array in which the values are stored
 	 *
 	 * @var array
 	 */
 	private static $values = [];
 
 	/**
-	 * Undocumented function
+	 * Binds values to our storage container.
 	 *
-	 * @param [type] $key
-	 * @param [type] $value
+	 * @param String $key
+	 * @param String $value
 	 *
 	 * @return void
 	 */
-	public static function bind($key, $value)
+	public static function bind(String $key, String $value): void
 	{
 		static::$values[$key] = $value;
 	}
 
 	/**
-	 * Undocumented function
+	 * Gets a value from storage, based on the provided key.
+	 * If the key doesn't exist, null is returned in stead
 	 *
-	 * @param [type] $key
+	 * @param String $key
 	 *
-	 * @return void
+	 * @return String|null
 	 */
-	public static function get($key)
+	public static function get(String $key)
 	{
 		if(isset(static::$values[$key])) {
 			return static::$values[$key];
@@ -40,25 +44,25 @@ class App
 	}
 
 	/**
-	 * Undocumented function
+	 * Check if a key is known.
 	 *
-	 * @param [type] $key
+	 * @param String $key
 	 *
 	 * @return boolean
 	 */
-	public static function has($key)
+	public static function has(String $key): bool
 	{
 		return isset(static::$values[$key]);
 	}
 
 	/**
-	 * Undocumented function
+	 * Removes a value from storage.
 	 *
-	 * @param [type] $key
+	 * @param String $key
 	 *
 	 * @return void
 	 */
-	public static function forget($key)
+	public static function forget($key): void
 	{
 		unset(static::$values[$key]);
 	}

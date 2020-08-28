@@ -1,6 +1,6 @@
 <?php
 
-namespace Chelona;
+namespace Chelona\Shell\Http;
 
 /**
  * Handles different response types
@@ -14,7 +14,7 @@ class Response
 	 *
 	 * @return void
 	 */
-	public static function json($data): void
+	public static function json(array $data): void
 	{
 		// TODO: see if this can be extracted
 		header('Content-Type: application/json');

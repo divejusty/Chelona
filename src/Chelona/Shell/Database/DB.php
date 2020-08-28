@@ -1,13 +1,28 @@
 <?php
 
-namespace Chelona\Database;
+namespace Chelona\Shell\Database;
 
 use \PDO;
 
+/**
+ * Undocumented class
+ */
 class DB
 {
+	/**
+	 * Undocumented variable
+	 *
+	 * @var [type]
+	 */
 	private static $connection;
 
+	/**
+	 * Undocumented function
+	 *
+	 * @param [type] $info
+	 *
+	 * @return void
+	 */
 	public static function init($info)
 	{
 		try { 
@@ -22,6 +37,14 @@ class DB
 		}
 	}
 
+	/**
+	 * Undocumented function
+	 *
+	 * @param [type] $table
+	 * @param [type] $model
+	 *
+	 * @return QueryBuilder
+	 */
 	public static function table($table, $model = null)
 	{
 		return new QueryBuilder(static::$connection, $table, $model);

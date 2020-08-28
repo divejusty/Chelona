@@ -1,28 +1,69 @@
 <?php
 
-namespace Chelona\Database;
+namespace Chelona\Shell\Database;
 
 use \PDO, \Exception;
 
+/**
+ * Undocumented class
+ */
 class QueryBuilder
 {
+	/**
+	 * Undocumented variable
+	 *
+	 * @var [type]
+	 */
 	private $connection;
 
+	/**
+	 * Undocumented variable
+	 *
+	 * @var [type]
+	 */
 	private $query;
 
+	/**
+	 * Undocumented variable
+	 *
+	 * @var array
+	 */
 	private $params = [];
 
+	/**
+	 * Undocumented variable
+	 *
+	 * @var [type]
+	 */
 	private $table;
 
+	/**
+	 * Undocumented variable
+	 *
+	 * @var [type]
+	 */
 	private $model;
 
+	/**
+	 * 
+	 */
 	const OPERATORS = ['=', '==', '<', '>', '<=', '>='];
+	
+	/**
+	 * 
+	 */
 	const DIRECTIONS = [ 'ASC', 'DESC' ];
 
+	/**
+	 * Undocumented function
+	 *
+	 * @param [type] $connection
+	 * @param [type] $table
+	 * @param [type] $model
+	 */
 	public function __construct($connection, $table, $model = null)
 	{
 		$this->table = $table;
-
 		$this->model = $model;
 
 		try {
@@ -34,17 +75,39 @@ class QueryBuilder
 		}
 	}
 
+	/**
+	 * Retrieve all results
+	 *
+	 * @return mixed
+	 */
 	public function all()
 	{
 		return $this->execute();
 	}
 
-	public function find($key, $table = 'id')
+	/**
+	 * Undocumented function
+	 *
+	 * @param [type] $key
+	 * @param string $table
+	 *
+	 * @return QueryBuilder
+	 */
+	public function find($key, $table = 'id'): QueryBuilder
 	{
 		return $this->where($table, '=', $key)->first();
 	}
 
-	public function where($column, $operator, $value)
+	/**
+	 * Undocumented function
+	 *
+	 * @param [type] $column
+	 * @param [type] $operator
+	 * @param [type] $value
+	 *
+	 * @return QueryBuilder
+	 */
+	public function where($column, $operator, $value): QueryBuilder
 	{
 		if(!in_array($operator, static::OPERATORS)) {
 			throw new DatabaseException('Unkown operator ' . $operator);
@@ -56,9 +119,14 @@ class QueryBuilder
 		return $this;
 	}
 
+	/**
+	 * Retrieve the first result
+	 *
+	 * @return QueryBuilder|null
+	 */
 	public function first()
 	{
-		$this->query = $this->query . ' LIMIT 1';
+		$this->query .= ' LIMIT 1';
 
 		$res = $this->execute();
 
@@ -76,16 +144,24 @@ class QueryBuilder
 	 * @param [any] $lkey The local key
 	 * @param [any] $fkey The foreign key
 	 *
-	 * @return void
+	 * @return QueryBuilder
 	 */
-	public function with($table, $lkey, $fkey)
+	public function with($table, $lkey, $fkey): QueryBuilder
 	{
 		$this->query = $this->query . " LEFT JOIN {$table} ON {$this->table}.{$lkey} = {$table}.{$fkey}";
 
 		return $this;
 	}
 
-	public function order($column, $direction = 'ASC')
+	/**
+	 * Set ordering options
+	 *
+	 * @param [type] $column
+	 * @param string $direction
+	 *
+	 * @return QueryBuilder
+	 */
+	public function order($column, $direction = 'ASC'): QueryBuilder
 	{
 		if(!in_array($direction, static::DIRECTIONS)) {
 			throw new DatabaseException('Unkown direction ' . $direction);
@@ -96,6 +172,11 @@ class QueryBuilder
 		return $this;
 	}
 
+	/**
+	 * Undocumented function
+	 *
+	 * @return mixed
+	 */
 	private function execute()
 	{
 		try {

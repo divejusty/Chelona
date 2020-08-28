@@ -1,9 +1,12 @@
 <?php
 
-namespace Chelona\Routing;
+namespace Chelona\Shell\Routing;
 
-use Chelona\Request;
+use Chelona\Shell\Http\Request;
 
+/**
+ * Undocumented class
+ */
 class Router
 {
 	/**
@@ -35,7 +38,7 @@ class Router
 
 	/**
 	 * Adds a route to the collection of routes.
-	 * @param $base ...
+	 * @param $uri ...
 	 * @param Chelona\Routing\Route $route ...
 	 */
 	public static function add($uri, Route $route)
@@ -44,6 +47,11 @@ class Router
 		static::$routes[$uri] = $route;
 	}
 
+	/**
+	 * Undocumented function
+	 *
+	 * @return void
+	 */
 	public static function direct()
 	{
 		$uri = Request::uri();
@@ -51,7 +59,11 @@ class Router
 		$method = Request::method();
 		$matchUri = '{' . $uri . '}'; // Do this so we can match the whole thing
 		foreach(static::$routes as $path => $route) {
-			if(preg_match_all($path, $matchUri) && $route->isMethod($method)) {
+			if(preg_match_all($path, $matchUri)) {
+				if(!$route->isMethod($method)) {
+					throw new RouterException("Incorrect method {$method} for route {static::$base}{$uri}!"); // Check if this works...
+				}
+
 				return $route->call(static::$endpointPath, $uri);
 			}
 		}

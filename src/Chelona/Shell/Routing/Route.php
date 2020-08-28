@@ -1,9 +1,9 @@
 <?php
 
-namespace Chelona\Routing;
+namespace Chelona\Shell\Routing;
 
 /**
- * Undocumented class
+ * Defines the Route object used in routing for http requests
  */
 class Route
 {
@@ -68,24 +68,41 @@ class Route
 	}
 
 	/**
+	 * Creates a route for a GET request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function get(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, 'GET');
+	}
+
+	/**
+	 * Creates a route for a POST request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function post(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, 'POST');
+	}
+
+	/**
 	 * Undocumented function
 	 *
 	 * @param [type] $path
 	 * @param [type] $action
+	 * @param [type] $method
 	 *
 	 * @return void
 	 */
-	public static function get($path, $action)
-	{
-		return static::createRoute($path, $action, 'GET');
-	}
-
-	public static function post($path, $action)
-	{
-		return static::createRoute($path, $action, 'POST');
-	}
-
-	private static function createRoute($path, $action, $method)
+	private static function createRoute(string $path, string $action, string $method): Route
 	{
 		$route = explode('@', $action);
 		$route = new Route(
@@ -100,7 +117,7 @@ class Route
 	}
 
 	/**
-	 * Undocumented function
+	 * Returns the Route's path.
 	 *
 	 * @return void
 	 */
@@ -126,7 +143,7 @@ class Route
 	 * Undocumented function
 	 *
 	 * @param [type] $endpointPath
-	 * @return void
+	 * @return object
 	 */
 	private function getEndpoint($endpointPath)
 	{
@@ -138,7 +155,7 @@ class Route
 	 * Undocumented function
 	 *
 	 * @param [type] $uri
-	 * @return void
+	 * @return array
 	 */
 	private function extractParams($uri)
 	{
@@ -151,7 +168,7 @@ class Route
 	}
 
 	/**
-	 * Undocumented function
+	 * Calls the endpoint associated with the Route.
 	 *
 	 * @param [type] $endpointPath
 	 * @param [type] $uri
@@ -173,13 +190,13 @@ class Route
 	}
 
 	/**
-	 * Checks whether the provided method matches the method of this route
+	 * Checks whether the provided method matches the method of this route.
 	 *
 	 * @param string $method
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public function isMethod($method)
+	public function isMethod(string $method): bool
 	{
 		return $this->method == $method;
 	}

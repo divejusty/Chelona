@@ -24,6 +24,11 @@ final class AppTest extends TestCase
 		$this->assertTrue(App::has($keyValPair['key']));
 	}
 
+	public function testGetEmptyValue(): void
+	{
+		$this->assertNull(App::get('baz'));
+	}
+
 	/**
 	 * @depends testBindValue
 	 */

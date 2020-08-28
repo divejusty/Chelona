@@ -1,7 +1,10 @@
 <?php
 
-namespace Chelona;
+namespace Chelona\Shell\Http;
 
+/**
+ * Undocumented class
+ */
 class Request
 {
 	/**

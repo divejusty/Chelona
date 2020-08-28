@@ -1,5 +1,7 @@
 <?php
 
+//TODO Check if this is still useful and stuff, maybe just replace it with a Container? Or look into replacing it with a .env or smth
+
 namespace Chelona;
 
 /**
@@ -18,11 +20,11 @@ class App
 	 * Binds values to our storage container.
 	 *
 	 * @param String $key
-	 * @param String $value
+	 * @param mixed $value
 	 *
 	 * @return void
 	 */
-	public static function bind(String $key, String $value): void
+	public static function bind(string $key, $value): void
 	{
 		static::$values[$key] = $value;
 	}
@@ -33,9 +35,9 @@ class App
 	 *
 	 * @param String $key
 	 *
-	 * @return String|null
+	 * @return Mixed|null
 	 */
-	public static function get(String $key)
+	public static function get(string $key)
 	{
 		if(isset(static::$values[$key])) {
 			return static::$values[$key];
@@ -48,9 +50,9 @@ class App
 	 *
 	 * @param String $key
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public static function has(String $key): bool
+	public static function has(string $key): bool
 	{
 		return isset(static::$values[$key]);
 	}

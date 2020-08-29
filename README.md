@@ -3,3 +3,10 @@ Chelona is a collection of classes that can be used as a basis for a lightweight
 
 ## Components
 List in Progress
+
+## TODO list
+* Expand testing
+* Expand Query Builder
+* Expand Container class
+	* Also look into using it somewhere?
+* Look into .env support

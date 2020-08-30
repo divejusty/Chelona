@@ -2,6 +2,8 @@
 
 namespace Chelona\Shell\Routing;
 
+use Chelona\Shell\Http\Request;
+
 /**
  * Defines the Route object used in routing for http requests
  */
@@ -46,7 +48,7 @@ class Route
 	 * @param [type] $action
 	 * @param [type] $method
 	 */
-	public function __construct($path, $endpoint, $action, $method)
+	private function __construct($path, $endpoint, $action, $method)
 	{
 		
 		$this->endpoint = $endpoint;
@@ -68,71 +70,12 @@ class Route
 	}
 
 	/**
-	 * Creates a route for a GET request.
+	 * Parses a route
 	 *
 	 * @param string $path
-	 * @param string $endpoint
-	 *
-	 * @return Route
+	 * @return string
 	 */
-	public static function get(string $path, string $endpoint): Route
-	{
-		return static::createRoute($path, $endpoint, 'GET');
-	}
-
-	/**
-	 * Creates a route for a POST request.
-	 *
-	 * @param string $path
-	 * @param string $endpoint
-	 *
-	 * @return Route
-	 */
-	public static function post(string $path, string $endpoint): Route
-	{
-		return static::createRoute($path, $endpoint, 'POST');
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @param [type] $path
-	 * @param [type] $action
-	 * @param [type] $method
-	 *
-	 * @return void
-	 */
-	private static function createRoute(string $path, string $action, string $method): Route
-	{
-		$route = explode('@', $action);
-		$route = new Route(
-			$path,
-			$route[0],
-			$route[1],
-			$method
-		);
-		Router::add(static::parseRoute($path), $route);
-
-		return $route;
-	}
-
-	/**
-	 * Returns the Route's path.
-	 *
-	 * @return void
-	 */
-	public function getPath()
-	{
-		return $this->path;
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @param [type] $path
-	 * @return void
-	 */
-	private static function parseRoute($path)
+	private static function parseRoute(string $path): string
 	{
 		$path = preg_replace('/(\{[A-z]*\})/', '(([A-z]|[0-9])+)', $path);
 		$path = str_replace('/', '\/', $path);
@@ -165,6 +108,106 @@ class Route
 			$params[$pos] = $uriParts[$pos];
 		}
 		return $params;
+	}
+
+	/**
+	 * Function used to create routes and add them to the router.
+	 *
+	 * @param string $path
+	 * @param string $action
+	 * @param string $method
+	 *
+	 * @return Route
+	 */
+	private static function createRoute(string $path, string $action, string $method): Route
+	{
+		$route = explode('@', $action);
+		$route = new Route(
+			$path,
+			$route[0],
+			$route[1],
+			$method
+		);
+		Router::add(static::parseRoute($path), $route);
+
+		return $route;
+	}
+
+	// Interface //
+
+	/**
+	 * Creates a route for a GET request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function get(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, Request::HTTP_GET);
+	}
+
+	/**
+	 * Creates a route for a POST request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function post(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, Request::HTTP_POST);
+	}
+
+	/**
+	 * Creates a route for a PUT request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function put(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, Request::HTTP_PUT);
+	}
+
+	/**
+	 * Creates a route for a PATCH request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function patch(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, Request::HTTP_PATCH);
+	}
+
+	/**
+	 * Creates a route for a DELETE request.
+	 *
+	 * @param string $path
+	 * @param string $endpoint
+	 *
+	 * @return Route
+	 */
+	public static function delete(string $path, string $endpoint): Route
+	{
+		return static::createRoute($path, $endpoint, Request::HTTP_DELETE);
+	}
+
+	/**
+	 * Returns the Route's path.
+	 *
+	 * @return void
+	 */
+	public function getPath()
+	{
+		return $this->path;
 	}
 
 	/**

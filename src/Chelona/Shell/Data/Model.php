@@ -50,9 +50,9 @@ abstract class Model
 	 *
 	 * @param mixed $key
 	 *
-	 * @return mixed
+	 * @return Model
 	 */
-	public static function find($key)
+	public static function find($key): Model
 	{
 		return new static(DB::table(static::getTable(), static::class)->find($key, static::$primary));
 	}
@@ -72,7 +72,7 @@ abstract class Model
 	 *
 	 * @return string
 	 */
-	public function __toString()
+	public function __toString(): string
 	{
 		return 'hello?'; // TODO: Fix?
 	}

@@ -44,4 +44,24 @@ final class ContainerTest extends TestCase
 
 		$this->assertEquals($this->container->toArray(), $containerClone->toArray());
 	}
+
+	public function testFilter()
+	{
+		$this->assertEquals([1,3], $this->container->filter(function($item) {
+			return $item % 2 == 1;
+		})->toArray());
+		$this->assertEquals(2, $this->container->itemCount());
+	}
+
+	public function testFirst()
+	{
+		$this->assertEquals(1, $this->container->first());
+		$this->assertNull(Container::empty()->first());
+	}
+
+	public function testLast()
+	{
+		$this->assertEquals(3, $this->container->last());
+		$this->assertNull(Container::empty()->last());
+	}
 }

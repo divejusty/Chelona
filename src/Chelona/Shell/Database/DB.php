@@ -5,25 +5,28 @@ namespace Chelona\Shell\Database;
 use \PDO;
 
 /**
- * Undocumented class
+ * This class handles basic database interactions.
  */
 class DB
 {
+	use DatabaseTrait;
+
 	/**
-	 * Undocumented variable
+	 * Field where the connection is stored.
 	 *
-	 * @var [type]
+	 * @var PDO
 	 */
 	private static $connection;
 
 	/**
-	 * Undocumented function
+	 * Sets up the database connection and stores it.
 	 *
-	 * @param [type] $info
+	 * @param array $info
 	 *
 	 * @return void
+	 * @throws DatabaseException
 	 */
-	public static function init($info)
+	public static function init($info): void
 	{
 		try { 
 			static::$connection = new PDO(
@@ -38,16 +41,29 @@ class DB
 	}
 
 	/**
-	 * Undocumented function
+	 * Creates a querybuilder instance for the given table.
 	 *
-	 * @param [type] $table
-	 * @param [type] $model
+	 * @param string $table
+	 * @param mixed|null $model
 	 *
 	 * @return QueryBuilder
 	 */
-	public static function table($table, $model = null)
+	public static function table(string $table, $model = null): QueryBuilder
 	{
 		return new QueryBuilder(static::$connection, $table, $model);
+	}
+
+	/**
+	 * Takes a raw SQL query and executes it.
+	 * 
+	 * @param string $query The query to be executed.
+	 * 
+	 * @return array
+	 * 
+	 */
+	public static function raw(string $query): array
+	{
+		return static::executeQuery(static::$connection, $query);
 	}
 
 }

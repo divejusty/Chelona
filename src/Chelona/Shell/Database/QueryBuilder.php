@@ -2,29 +2,29 @@
 
 namespace Chelona\Shell\Database;
 
-use \PDO, \Exception;
-
 /**
  * Undocumented class
  */
 class QueryBuilder
 {
+	use DatabaseTrait;
+
 	/**
-	 * Undocumented variable
+	 * The Database connection
 	 *
-	 * @var [type]
+	 * @var \PDO
 	 */
 	private $connection;
 
 	/**
 	 * Undocumented variable
 	 *
-	 * @var [type]
+	 * @var string
 	 */
 	private $query;
 
 	/**
-	 * Undocumented variable
+	 * Array to store parameters
 	 *
 	 * @var array
 	 */
@@ -33,7 +33,7 @@ class QueryBuilder
 	/**
 	 * Undocumented variable
 	 *
-	 * @var [type]
+	 * @var string
 	 */
 	private $table;
 
@@ -45,23 +45,13 @@ class QueryBuilder
 	private $model;
 
 	/**
-	 * 
-	 */
-	const OPERATORS = ['=', '==', '<', '>', '<=', '>='];
-	
-	/**
-	 * 
-	 */
-	const DIRECTIONS = [ 'ASC', 'DESC' ];
-
-	/**
 	 * Undocumented function
 	 *
-	 * @param [type] $connection
-	 * @param [type] $table
-	 * @param [type] $model
+	 * @param \PDO $connection
+	 * @param string $table
+	 * @param mixed|null $model
 	 */
-	public function __construct($connection, $table, $model = null)
+	public function __construct(\PDO $connection, string $table, $model = null)
 	{
 		$this->table = $table;
 		$this->model = $model;
@@ -70,7 +60,7 @@ class QueryBuilder
 			$this->connection = $connection;
 
 			$this->query = "SELECT * FROM {$table}";
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			throw new DatabaseException('Something went wrong.' . $e->getMessage());
 		}
 	}
@@ -88,26 +78,26 @@ class QueryBuilder
 	/**
 	 * Undocumented function
 	 *
-	 * @param [type] $key
-	 * @param string $table
+	 * @param mixed $key
+	 * @param string $column 
 	 *
 	 * @return QueryBuilder
 	 */
-	public function find($key, $table = 'id'): QueryBuilder
+	public function find($key, $column = 'id'): QueryBuilder
 	{
-		return $this->where($table, '=', $key)->first();
+		return $this->where($column, '=', $key)->first();
 	}
 
 	/**
 	 * Undocumented function
 	 *
-	 * @param [type] $column
-	 * @param [type] $operator
-	 * @param [type] $value
+	 * @param string $column
+	 * @param string $operator
+	 * @param mixed $value
 	 *
 	 * @return QueryBuilder
 	 */
-	public function where($column, $operator, $value): QueryBuilder
+	public function where(string $column, string $operator, $value): QueryBuilder
 	{
 		if(!in_array($operator, static::OPERATORS)) {
 			throw new DatabaseException('Unkown operator ' . $operator);
@@ -173,21 +163,13 @@ class QueryBuilder
 	}
 
 	/**
-	 * Undocumented function
+	 * Executes the query
 	 *
 	 * @return mixed
+	 * @throws DatabaseException
 	 */
 	private function execute()
 	{
-		try {
-			$statement = $this->connection->prepare($this->query);
-	
-			$statement->execute($this->params);
-			
-			return $statement->fetchAll(PDO::FETCH_OBJ);
-
-		} catch(Exception $e) {
-			throw new DatabaseException('Could not execute query: ' . $this->query . '\n' . $e->getMessage());
-		}
+		return static::executeQuery($this->connection, $this->query, $this->params);
 	}
 }

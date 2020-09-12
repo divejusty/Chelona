@@ -11,11 +11,9 @@ abstract class Model
 {
 	// protected static $table = null; // TODO: set this auto-magically?
 	/**
-	 * Undocumented variable
-	 *
-	 * @var string
+	 * The primary key used by the table.
 	 */
-	protected static $primary = 'id';
+	protected static string $primary = 'id';
 
 	/**
 	 * Undocumented variable
@@ -37,9 +35,9 @@ abstract class Model
 	/**
 	 * Undocumented function
 	 *
-	 * @return void
+	 * @return string
 	 */
-	private static function getTable()
+	private static function getTable(): string
 	{
 		$class = explode('\\', static::class);
 		return strtolower(end($class)) . 's';

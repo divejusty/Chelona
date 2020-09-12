@@ -2,8 +2,6 @@
 
 namespace Chelona\Shell\Database;
 
-use \PDO;
-
 /**
  * This class handles basic database interactions.
  */
@@ -13,10 +11,8 @@ class DB
 
 	/**
 	 * Field where the connection is stored.
-	 *
-	 * @var PDO
 	 */
-	private static $connection;
+	private static \PDO $connection;
 
 	/**
 	 * Sets up the database connection and stores it.
@@ -26,10 +22,10 @@ class DB
 	 * @return void
 	 * @throws DatabaseException
 	 */
-	public static function init($info): void
+	public static function init(array $info): void
 	{
 		try { 
-			static::$connection = new PDO(
+			static::$connection = new \PDO(
 				$info['type'].':host='. $info['host'] .':'.$info['port'].';dbname='.$info['dbname'],
 				$info['username'],
 				$info['password'],

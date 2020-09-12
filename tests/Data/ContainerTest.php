@@ -31,9 +31,7 @@ final class ContainerTest extends TestCase
 
 	public function testMap()
 	{
-		$this->container->map(function ($elem) {
-			return $elem + 1;
-		});
+		$this->container->map(fn ($elem) => $elem + 1);
 
 		$this->assertEquals([2,3,4], $this->container->toArray());
 	}
@@ -47,9 +45,7 @@ final class ContainerTest extends TestCase
 
 	public function testFilter()
 	{
-		$this->assertEquals([1,3], $this->container->filter(function($item) {
-			return $item % 2 == 1;
-		})->toArray());
+		$this->assertEquals([1,3], $this->container->filter(fn($item) => $item % 2 == 1)->toArray());
 		$this->assertEquals(2, $this->container->itemCount());
 	}
 

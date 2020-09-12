@@ -8,10 +8,14 @@ _List in Progress_
 
 ## TODO list
 * Expand testing
-* Expand Query Builder
+* Expand Database stuff
+	* Extend QueryBuilder
+	* Think of good setup/naming for the trait
 * Expand Container class
 	* Also look into using it somewhere?
 * Look into .env support
 * Complete PHPDoc
 	* Also add PHPDoc to tests!
 * Add more components
+* Set up linting
+* Upgrade stuff to PHP 8 when the time comes

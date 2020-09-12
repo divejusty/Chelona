@@ -11,31 +11,23 @@ class QueryBuilder
 
 	/**
 	 * The Database connection
-	 *
-	 * @var \PDO
 	 */
-	private $connection;
+	private \PDO $connection;
 
 	/**
 	 * Undocumented variable
-	 *
-	 * @var string
 	 */
-	private $query;
+	private string $query;
 
 	/**
 	 * Array to store parameters
-	 *
-	 * @var array
 	 */
-	private $params = [];
+	private array $params = [];
 
 	/**
 	 * Undocumented variable
-	 *
-	 * @var string
 	 */
-	private $table;
+	private string $table;
 
 	/**
 	 * Undocumented variable
@@ -83,7 +75,7 @@ class QueryBuilder
 	 *
 	 * @return QueryBuilder
 	 */
-	public function find($key, $column = 'id'): QueryBuilder
+	public function find($key, string $column = 'id'): QueryBuilder
 	{
 		return $this->where($column, '=', $key)->first();
 	}
@@ -114,7 +106,7 @@ class QueryBuilder
 	 *
 	 * @return QueryBuilder|null
 	 */
-	public function first()
+	public function first(): ?QueryBuilder
 	{
 		$this->query .= ' LIMIT 1';
 
@@ -130,13 +122,13 @@ class QueryBuilder
 	/**
 	 * Performs a left join on another table
 	 *
-	 * @param [string] $table The table to be joined
-	 * @param [any] $lkey The local key
-	 * @param [any] $fkey The foreign key
+	 * @param string $table The table to be joined
+	 * @param string $lkey The local key
+	 * @param string $fkey The foreign key
 	 *
 	 * @return QueryBuilder
 	 */
-	public function with($table, $lkey, $fkey): QueryBuilder
+	public function with(string $table, string $lkey, string $fkey): QueryBuilder
 	{
 		$this->query = $this->query . " LEFT JOIN {$table} ON {$this->table}.{$lkey} = {$table}.{$fkey}";
 
@@ -146,12 +138,12 @@ class QueryBuilder
 	/**
 	 * Set ordering options
 	 *
-	 * @param [type] $column
+	 * @param string $column
 	 * @param string $direction
 	 *
 	 * @return QueryBuilder
 	 */
-	public function order($column, $direction = 'ASC'): QueryBuilder
+	public function order(string $column, string $direction = 'ASC'): QueryBuilder
 	{
 		if(!in_array($direction, static::DIRECTIONS)) {
 			throw new DatabaseException('Unkown direction ' . $direction);

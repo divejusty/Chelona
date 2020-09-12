@@ -8,24 +8,18 @@ class Container
 
 	/**
 	 * The data stored in the container.
-	 * 
-	 * @var array
 	 */
-	private $data = [];
+	private array $data = [];
 
 	/**
 	 * The number of items stored in the container.
-	 * 
-	 * @var int
 	 */
-	private $count;
+	private int $count;
 
 	/**
 	 * Flag to see if named keys are used. Currently always false. Might receive updates in the future.
-	 * 
-	 * @var bool $namedKeys
 	 */
-	private $namedKeys = false;
+	private bool $namedKeys = false;
 
 	private function __construct($data)
 	{

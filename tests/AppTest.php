@@ -13,7 +13,7 @@ final class AppTest extends TestCase
 		$value = 'bar';
 
 		App::bind($key, $value);
-		$this->assertEquals(App::get($key), $value);
+		$this->assertEquals($value, App::get($key));
 
 		return ['key' => $key, 'value' => $value];
 	}

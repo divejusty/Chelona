@@ -31,7 +31,7 @@ class App
 
     /**
      * Gets a value from storage, based on the provided key.
-     * If the key doesn't exist, null is returned in stead
+     * If the key doesn't exist, null is returned instead
      *
      * @param String $key
      *

@@ -4,9 +4,6 @@ namespace Chelona\Shell\Routing;
 
 use Chelona\Shell\Http\Request;
 
-/**
- * Undocumented class
- */
 class Router
 {
     /**
@@ -32,8 +29,8 @@ class Router
      */
     public static function init(string $base = '', string $endpointPath = ''): void
     {
-        static::$base 			= $base;
-        static::$endpointPath 	= $endpointPath;
+        static::$base = $base;
+        static::$endpointPath = $endpointPath;
     }
 
     /**
@@ -44,6 +41,9 @@ class Router
         static::$routes[$uri] = $route;
     }
 
+    /**
+     * @throws \Chelona\Shell\Routing\RouterException
+     */
     public static function direct()
     {
         $uri = Request::uri();
@@ -53,7 +53,8 @@ class Router
         foreach (static::$routes as $path => $route) {
             if (preg_match_all($path, $matchUri)) {
                 if (!$route->isMethod($method)) {
-                    throw new RouterException("Incorrect method {$method} for route {static::$base}{$uri}!"); // TODO Check if this works...
+                    $fullUrl = static::$base . $uri;
+                    throw new RouterException("Incorrect method $method->value for route $fullUrl!");
                 }
 
                 return $route->call(static::$endpointPath, $uri);

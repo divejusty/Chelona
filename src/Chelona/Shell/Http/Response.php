@@ -31,6 +31,6 @@ class Response
      */
     public static function plain($data): void // TODO: Rename?
     {
-        print($data);
+        print $data;
     }
 }

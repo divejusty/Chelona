@@ -7,14 +7,12 @@ namespace Chelona;
 /**
  * Storage class for app variables and constants
  */
-class App
+final class App
 {
     /**
      * The array in which the values are stored
-     *
-     * @var array
      */
-    private static $values = [];
+    private static array $values = [];
 
     /**
      * Binds values to our storage container.
@@ -24,9 +22,9 @@ class App
      *
      * @return void
      */
-    public static function bind(string $key, $value): void
+    public static function bind(string $key, mixed $value): void
     {
-        static::$values[$key] = $value;
+        App::$values[$key] = $value;
     }
 
     /**
@@ -37,10 +35,10 @@ class App
      *
      * @return Mixed|null
      */
-    public static function get(string $key)
+    public static function get(string $key): mixed
     {
-        if (isset(static::$values[$key])) {
-            return static::$values[$key];
+        if (isset(App::$values[$key])) {
+            return App::$values[$key];
         }
         return null;
     }
@@ -54,18 +52,18 @@ class App
      */
     public static function has(string $key): bool
     {
-        return isset(static::$values[$key]);
+        return isset(App::$values[$key]);
     }
 
     /**
      * Removes a value from storage.
      *
-     * @param String $key
+     * @param  string  $key
      *
      * @return void
      */
-    public static function forget($key): void
+    public static function forget(string $key): void
     {
-        unset(static::$values[$key]);
+        unset(App::$values[$key]);
     }
 }

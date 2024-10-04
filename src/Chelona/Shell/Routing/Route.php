@@ -52,6 +52,45 @@ class Route
         return static::createRoute($path, $endpoint, RequestMethod::POST);
     }
 
+    /**
+     * Creates a route for a PUT request.
+     *
+     * @param string $path
+     * @param string $endpoint
+     *
+     * @return Route
+     */
+    public static function put(string $path, string $endpoint): Route
+    {
+        return static::createRoute($path, $endpoint, RequestMethod::PUT);
+    }
+
+    /**
+     * Creates a route for a DELETE request.
+     *
+     * @param string $path
+     * @param string $endpoint
+     *
+     * @return Route
+     */
+    public static function delete(string $path, string $endpoint): Route
+    {
+        return static::createRoute($path, $endpoint, RequestMethod::DELETE);
+    }
+
+    /**
+     * Creates a route for a PATCH request.
+     *
+     * @param string $path
+     * @param string $endpoint
+     *
+     * @return Route
+     */
+    public static function patch(string $path, string $endpoint): Route
+    {
+        return static::createRoute($path, $endpoint, RequestMethod::PATCH);
+    }
+
     private static function createRoute(string $path, string $action, RequestMethod $method): Route
     {
         $route = explode('@', $action);

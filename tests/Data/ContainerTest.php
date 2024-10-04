@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Tests\Data;
+
 use PHPUnit\Framework\TestCase;
 
 use Chelona\Shell\Data\Container;

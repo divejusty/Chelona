@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
-use PHPUnit\Framework\TestCase;
 
+namespace Tests;
+
+use PHPUnit\Framework\TestCase;
 use Chelona\App;
 
 final class AppTest extends TestCase

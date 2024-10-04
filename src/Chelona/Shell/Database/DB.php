@@ -3,51 +3,35 @@
 namespace Chelona\Shell\Database;
 
 use PDO;
+use PDOException;
 
-/**
- * Undocumented class
- */
-class DB
+final class DB
 {
-    /**
-     * Undocumented variable
-     *
-     * @var [type]
-     */
-    private static $connection;
+    private static PDO $connection;
 
     /**
-     * Undocumented function
-     *
-     * @param [type] $info
-     *
-     * @return void
+     * @throws \Chelona\Shell\Database\DatabaseException
      */
-    public static function init($info)
+    public static function init(array $info): void
     {
         try {
-            static::$connection = new PDO(
+            DB::$connection = new PDO(
                 $info['type'].':host='. $info['host'] .':'.$info['port'].';dbname='.$info['dbname'],
                 $info['username'],
                 $info['password'],
                 $info['options']
             );
-        } catch (\Exception $e) {
-            throw new DatabaseException('Could not connect to database.\n' . $e->getMessage());
+        } catch (PDOException $e) {
+            throw new DatabaseException('Could not connect to database.\n' . $e->getMessage(), 500, $e);
         }
     }
 
     /**
-     * Undocumented function
-     *
-     * @param [type] $table
-     * @param [type] $model
-     *
-     * @return QueryBuilder
+     * @throws \Chelona\Shell\Database\DatabaseException
      */
-    public static function table($table, $model = null)
+    public static function table(string $table, $model = null): QueryBuilder
     {
-        return new QueryBuilder(static::$connection, $table, $model);
+        return new QueryBuilder(DB::$connection, $table, $model);
     }
 
 }

@@ -10,6 +10,9 @@ use Chelona\Shell\Data\Container;
 
 final class ContainerTest extends TestCase
 {
+    private array $values;
+    private Container $container;
+
 	protected function setUp(): void
 	{
 		$this->values = [1, 2, 3];

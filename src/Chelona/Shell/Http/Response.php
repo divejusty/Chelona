@@ -7,30 +7,30 @@ namespace Chelona\Shell\Http;
  */
 class Response
 {
-	/**
-	 * Sends JSON data
-	 *
-	 * @param array $data
-	 *
-	 * @return void
-	 */
-	public static function json(array $data): void
-	{
-		// TODO: see if this can be extracted
-		header('Content-Type: application/json');
+    /**
+     * Sends JSON data
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public static function json(array $data): void
+    {
+        // TODO: see if this can be extracted
+        header('Content-Type: application/json');
 
-		echo json_encode($data);
-	}
+        echo json_encode($data);
+    }
 
-	/**
-	 * Sends plain text
-	 *
-	 * @param mixed $data
-	 *
-	 * @return void
-	 */
-	public static function plain($data): void // TODO: Rename?
-	{
-		print($data);
-	}
+    /**
+     * Sends plain text
+     *
+     * @param mixed $data
+     *
+     * @return void
+     */
+    public static function plain($data): void // TODO: Rename?
+    {
+        print($data);
+    }
 }

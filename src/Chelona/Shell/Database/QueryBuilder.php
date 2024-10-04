@@ -2,192 +2,193 @@
 
 namespace Chelona\Shell\Database;
 
-use \PDO, \Exception;
+use PDO;
+use Exception;
 
 /**
  * Undocumented class
  */
 class QueryBuilder
 {
-	/**
-	 * Undocumented variable
-	 *
-	 * @var [type]
-	 */
-	private $connection;
+    /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $connection;
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var [type]
-	 */
-	private $query;
+    /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $query;
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var array
-	 */
-	private $params = [];
+    /**
+     * Undocumented variable
+     *
+     * @var array
+     */
+    private $params = [];
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var [type]
-	 */
-	private $table;
+    /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $table;
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var [type]
-	 */
-	private $model;
+    /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $model;
 
-	/**
-	 * 
-	 */
-	const OPERATORS = ['=', '==', '<', '>', '<=', '>='];
-	
-	/**
-	 * 
-	 */
-	const DIRECTIONS = [ 'ASC', 'DESC' ];
+    /**
+     *
+     */
+    public const OPERATORS = ['=', '==', '<', '>', '<=', '>='];
 
-	/**
-	 * Undocumented function
-	 *
-	 * @param [type] $connection
-	 * @param [type] $table
-	 * @param [type] $model
-	 */
-	public function __construct($connection, $table, $model = null)
-	{
-		$this->table = $table;
-		$this->model = $model;
+    /**
+     *
+     */
+    public const DIRECTIONS = [ 'ASC', 'DESC' ];
 
-		try {
-			$this->connection = $connection;
+    /**
+     * Undocumented function
+     *
+     * @param [type] $connection
+     * @param [type] $table
+     * @param [type] $model
+     */
+    public function __construct($connection, $table, $model = null)
+    {
+        $this->table = $table;
+        $this->model = $model;
 
-			$this->query = "SELECT * FROM {$table}";
-		} catch(Exception $e) {
-			throw new DatabaseException('Something went wrong.' . $e->getMessage());
-		}
-	}
+        try {
+            $this->connection = $connection;
 
-	/**
-	 * Retrieve all results
-	 *
-	 * @return mixed
-	 */
-	public function all()
-	{
-		return $this->execute();
-	}
+            $this->query = "SELECT * FROM {$table}";
+        } catch (Exception $e) {
+            throw new DatabaseException('Something went wrong.' . $e->getMessage());
+        }
+    }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @param [type] $key
-	 * @param string $table
-	 *
-	 * @return QueryBuilder
-	 */
-	public function find($key, $table = 'id'): QueryBuilder
-	{
-		return $this->where($table, '=', $key)->first();
-	}
+    /**
+     * Retrieve all results
+     *
+     * @return mixed
+     */
+    public function all()
+    {
+        return $this->execute();
+    }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @param [type] $column
-	 * @param [type] $operator
-	 * @param [type] $value
-	 *
-	 * @return QueryBuilder
-	 */
-	public function where($column, $operator, $value): QueryBuilder
-	{
-		if(!in_array($operator, static::OPERATORS)) {
-			throw new DatabaseException('Unkown operator ' . $operator);
-		}
+    /**
+     * Undocumented function
+     *
+     * @param [type] $key
+     * @param string $table
+     *
+     * @return QueryBuilder
+     */
+    public function find($key, $table = 'id'): QueryBuilder
+    {
+        return $this->where($table, '=', $key)->first();
+    }
 
-		$this->query = $this->query . " WHERE {$this->table}.{$column} {$operator} :{$column}";
-		$this->params[$column] = $value;
+    /**
+     * Undocumented function
+     *
+     * @param [type] $column
+     * @param [type] $operator
+     * @param [type] $value
+     *
+     * @return QueryBuilder
+     */
+    public function where($column, $operator, $value): QueryBuilder
+    {
+        if (!in_array($operator, static::OPERATORS)) {
+            throw new DatabaseException('Unkown operator ' . $operator);
+        }
 
-		return $this;
-	}
+        $this->query = $this->query . " WHERE {$this->table}.{$column} {$operator} :{$column}";
+        $this->params[$column] = $value;
 
-	/**
-	 * Retrieve the first result
-	 *
-	 * @return QueryBuilder|null
-	 */
-	public function first()
-	{
-		$this->query .= ' LIMIT 1';
+        return $this;
+    }
 
-		$res = $this->execute();
+    /**
+     * Retrieve the first result
+     *
+     * @return QueryBuilder|null
+     */
+    public function first()
+    {
+        $this->query .= ' LIMIT 1';
 
-		if(isset($res) && !empty($res)) {
-			//return new $this->model
-			return $res[0];
-		}
-		return null;
-	}
+        $res = $this->execute();
 
-	/**
-	 * Performs a left join on another table
-	 *
-	 * @param [string] $table The table to be joined
-	 * @param [any] $lkey The local key
-	 * @param [any] $fkey The foreign key
-	 *
-	 * @return QueryBuilder
-	 */
-	public function with($table, $lkey, $fkey): QueryBuilder
-	{
-		$this->query = $this->query . " LEFT JOIN {$table} ON {$this->table}.{$lkey} = {$table}.{$fkey}";
+        if (isset($res) && !empty($res)) {
+            //return new $this->model
+            return $res[0];
+        }
+        return null;
+    }
 
-		return $this;
-	}
+    /**
+     * Performs a left join on another table
+     *
+     * @param [string] $table The table to be joined
+     * @param [any] $lkey The local key
+     * @param [any] $fkey The foreign key
+     *
+     * @return QueryBuilder
+     */
+    public function with($table, $lkey, $fkey): QueryBuilder
+    {
+        $this->query = $this->query . " LEFT JOIN {$table} ON {$this->table}.{$lkey} = {$table}.{$fkey}";
 
-	/**
-	 * Set ordering options
-	 *
-	 * @param [type] $column
-	 * @param string $direction
-	 *
-	 * @return QueryBuilder
-	 */
-	public function order($column, $direction = 'ASC'): QueryBuilder
-	{
-		if(!in_array($direction, static::DIRECTIONS)) {
-			throw new DatabaseException('Unkown direction ' . $direction);
-		}
+        return $this;
+    }
 
-		$this->query = $this->query . " ORDER BY {$this->table}.{$column} {$direction}";
+    /**
+     * Set ordering options
+     *
+     * @param [type] $column
+     * @param string $direction
+     *
+     * @return QueryBuilder
+     */
+    public function order($column, $direction = 'ASC'): QueryBuilder
+    {
+        if (!in_array($direction, static::DIRECTIONS)) {
+            throw new DatabaseException('Unkown direction ' . $direction);
+        }
 
-		return $this;
-	}
+        $this->query = $this->query . " ORDER BY {$this->table}.{$column} {$direction}";
 
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	private function execute()
-	{
-		try {
-			$statement = $this->connection->prepare($this->query);
-	
-			$statement->execute($this->params);
-			
-			return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $this;
+    }
 
-		} catch(Exception $e) {
-			throw new DatabaseException('Could not execute query: ' . $this->query . '\n' . $e->getMessage());
-		}
-	}
+    /**
+     * Undocumented function
+     *
+     * @return mixed
+     */
+    private function execute()
+    {
+        try {
+            $statement = $this->connection->prepare($this->query);
+
+            $statement->execute($this->params);
+
+            return $statement->fetchAll(PDO::FETCH_OBJ);
+
+        } catch (Exception $e) {
+            throw new DatabaseException('Could not execute query: ' . $this->query . '\n' . $e->getMessage());
+        }
+    }
 }

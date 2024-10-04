@@ -7,5 +7,4 @@ namespace Chelona\Shell\Database;
  */
 class DatabaseException extends \Exception
 {
-
 }

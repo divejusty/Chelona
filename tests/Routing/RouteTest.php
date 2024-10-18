@@ -8,6 +8,7 @@ use Chelona\Shell\Http\RequestMethod;
 use Chelona\Shell\Routing\Action;
 use Chelona\Shell\Routing\Route;
 use PHPUnit\Framework\TestCase;
+use Tests\Fixtures\FooController;
 
 final class RouteTest extends TestCase
 {
@@ -17,7 +18,7 @@ final class RouteTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->defaultAction = new Action('FooController', 'index');
+        $this->defaultAction = new Action(FooController::class, 'index');
     }
 
 	public function testGet()

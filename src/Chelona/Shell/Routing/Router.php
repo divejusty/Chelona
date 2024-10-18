@@ -18,20 +18,13 @@ class Router
     private static string $base;
 
     /**
-     * The namespace in which the endpoints reside.
-     */
-    private static string $endpointPath;
-
-    /**
      * Initialize the router.
      *
      * @param  string  $base Will be used to set the base URL for the application. Defaults to an empty string.
-     * @param  string  $endpointPath Will be used to set the namespace for the application. Defaults to an empty string.
      */
-    public static function init(string $base = '', string $endpointPath = ''): void
+    public static function init(string $base = ''): void
     {
         static::$base = $base;
-        static::$endpointPath = $endpointPath;
     }
 
     /**
@@ -58,7 +51,7 @@ class Router
                     throw new RouterException("Incorrect method $method->value for route $fullUrl!");
                 }
 
-                return $route->call(static::$endpointPath, $uri);
+                return $route->call($uri);
             }
         }
 

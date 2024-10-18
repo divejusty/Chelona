@@ -118,7 +118,7 @@ class Route
 
     private static function parseRoute(string $path): string
     {
-        $path = preg_replace('/(\{[A-z]*\})/', '(([A-z]|[0-9])+)', $path);
+        $path = preg_replace('/(\{[A-z]*})/', '(([A-z]|[0-9])+)', $path);
         $path = str_replace('/', '\/', $path);
         return '/\{' . $path . '\}/';
     }
@@ -135,21 +135,15 @@ class Route
 
     /**
      * Calls the endpoint associated with the Route.
-     * @throws \Chelona\Shell\Routing\RouterException
      */
-    public function call($endpointPath, $uri)
+    public function call($uri)
     {
-        $class = $this->action->getEndpoint($endpointPath);
-        if (! method_exists($class, $this->action->method)) {
-            throw new RouterException("Undefined method `{$this->action->method}` in endpoint `{$this->action->controller}`.");
-        }
-
         if (count($this->params) > 0) {
             $params = $this->extractParams($uri);
-            return $class->{$this->action}(...$params);
+            return $this->action->controller->{$this->action->method}(...$params);
         }
 
-        return $class->{$this->action}();
+        return $this->action->controller->{$this->action->method}();
     }
 
     /**

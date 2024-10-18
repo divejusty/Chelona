@@ -2,17 +2,15 @@
 
 namespace Chelona\Shell\Routing;
 
-class Action
+readonly class Action
 {
-    public function __construct(public readonly string $controller, public readonly string $method)
+    /**
+     * @throws \Chelona\Shell\Routing\RouterException
+     */
+    public function __construct(public string $controller, public string $method)
     {
+        if (! method_exists($this->controller, $this->method)) {
+            throw new RouterException("Undefined method `$this->method` in endpoint `$this->controller`.");
+        }
     }
-
-
-    public function getEndpoint(string $endpointPath)
-    {
-        $endpoint = '\\' . $endpointPath . '\\'. $this->controller;
-        return new $endpoint();
-    }
-
 }

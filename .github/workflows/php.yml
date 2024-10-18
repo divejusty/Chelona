@@ -24,3 +24,6 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
+
+      - name: Run cs fixer
+        run: composer run-script cs -- --dry-run

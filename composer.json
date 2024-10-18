@@ -26,6 +26,11 @@
         "friendsofphp/php-cs-fixer": "^3.64"
 	},
 	"scripts": {
+		"all": [
+			"composer cs",
+			"composer test"
+		],
+		"cs": "./vendor/bin/php-cs-fixer fix src",
 		"test": "./vendor/bin/phpunit tests"
 	}
 }

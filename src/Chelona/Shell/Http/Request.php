@@ -2,18 +2,24 @@
 
 namespace Chelona\Shell\Http;
 
-class Request
+readonly class Request
 {
-    public static function uri(): false|array|int|string|null
+    public static function uri(): false|string
     {
         $uri = $_SERVER['REQUEST_URI'];
         $uri = trim($uri, '/');
-        return parse_url($uri, PHP_URL_PATH);
+        $parsedUrl = parse_url($uri, PHP_URL_PATH);
+
+        if (is_string($parsedUrl)) {
+            return $parsedUrl;
+        }
+
+        return false;
     }
 
-    public static function method()
+    public static function method(): RequestMethod
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return RequestMethod::from($_SERVER['REQUEST_METHOD']);
     }
 
     public static function all(): array

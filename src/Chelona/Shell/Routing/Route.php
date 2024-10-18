@@ -11,10 +11,10 @@ class Route
 {
     private array $params = [];
 
-    public function __construct(private readonly string $path, private readonly string $endpoint, private readonly string $action, private readonly RequestMethod $method)
+    public function __construct(private readonly string $path, private readonly Action $action, private readonly RequestMethod $method)
     {
         $params = [];
-        preg_match_all('/(\{[A-z]*\})/', $path, $params);
+        preg_match_all('/(\{[A-z]*})/', $path, $params);
 
         if (count($params[0]) > 0) {
             $pathParts = explode('/', $this->path);
@@ -30,11 +30,11 @@ class Route
      * Creates a route for a GET request.
      *
      * @param string $path
-     * @param string $endpoint
+     * @param Action $endpoint
      *
      * @return Route
      */
-    public static function get(string $path, string $endpoint): Route
+    public static function get(string $path, Action $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::GET);
     }
@@ -43,11 +43,11 @@ class Route
      * Creates a route for a POST request.
      *
      * @param string $path
-     * @param string $endpoint
+     * @param Action $endpoint
      *
      * @return Route
      */
-    public static function post(string $path, string $endpoint): Route
+    public static function post(string $path, Action $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::POST);
     }
@@ -56,11 +56,11 @@ class Route
      * Creates a route for a PUT request.
      *
      * @param string $path
-     * @param string $endpoint
+     * @param Action $endpoint
      *
      * @return Route
      */
-    public static function put(string $path, string $endpoint): Route
+    public static function put(string $path, Action $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::PUT);
     }
@@ -69,11 +69,11 @@ class Route
      * Creates a route for a DELETE request.
      *
      * @param string $path
-     * @param string $endpoint
+     * @param Action $endpoint
      *
      * @return Route
      */
-    public static function delete(string $path, string $endpoint): Route
+    public static function delete(string $path, Action $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::DELETE);
     }
@@ -82,22 +82,20 @@ class Route
      * Creates a route for a PATCH request.
      *
      * @param string $path
-     * @param string $endpoint
+     * @param Action $endpoint
      *
      * @return Route
      */
-    public static function patch(string $path, string $endpoint): Route
+    public static function patch(string $path, Action $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::PATCH);
     }
 
-    private static function createRoute(string $path, string $action, RequestMethod $method): Route
+    private static function createRoute(string $path, Action $action, RequestMethod $method): Route
     {
-        $route = explode('@', $action);
         $route = new Route(
             $path,
-            $route[0],
-            $route[1],
+            $action,
             $method
         );
         Router::add(static::parseRoute($path), $route);
@@ -113,17 +111,16 @@ class Route
         return $this->path;
     }
 
+    public function getParameters(): array
+    {
+        return $this->params;
+    }
+
     private static function parseRoute(string $path): string
     {
         $path = preg_replace('/(\{[A-z]*\})/', '(([A-z]|[0-9])+)', $path);
         $path = str_replace('/', '\/', $path);
         return '/\{' . $path . '\}/';
-    }
-
-    private function getEndpoint($endpointPath)
-    {
-        $endpoint = '\\' . $endpointPath . '\\'. $this->endpoint;
-        return new $endpoint();
     }
 
     private function extractParams(string $uri): array
@@ -142,9 +139,9 @@ class Route
      */
     public function call($endpointPath, $uri)
     {
-        $class = $this->getEndpoint($endpointPath);
-        if (! method_exists($class, $this->action)) {
-            throw new RouterException('Undefined method `' . $this->action . '` in endpoint `' . $this->endpoint . '`.');
+        $class = $this->action->getEndpoint($endpointPath);
+        if (! method_exists($class, $this->action->method)) {
+            throw new RouterException("Undefined method `{$this->action->method}` in endpoint `{$this->action->controller}`.");
         }
 
         if (count($this->params) > 0) {

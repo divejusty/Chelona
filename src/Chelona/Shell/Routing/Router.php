@@ -7,6 +7,7 @@ use Chelona\Shell\Http\Request;
 class Router
 {
     /**
+     * @var \Chelona\Shell\Routing\Route[]
      * The collection of all registered routes in the application
      */
     private static array $routes = [];

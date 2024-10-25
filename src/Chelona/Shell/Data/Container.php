@@ -19,10 +19,8 @@ class Container
      * Static Methods *
      *****************/
 
-    // TODO: Look into creation of arrays with named keys and extra functionality with that
-
     /**
-     * Create a new Container instance with the specified data as it's contents.
+     * Create a new Container instance with the specified data as its contents.
      *
      * @param  mixed  ...$data
      * @return Container

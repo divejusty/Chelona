@@ -1,10 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Tests;
-
-use PHPUnit\Framework\TestCase;
+namespace Tests\Http;
 
 use Chelona\Shell\Http\Response;
+use PHPUnit\Framework\TestCase;
 
 final class ResponseTest extends TestCase
 {

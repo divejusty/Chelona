@@ -10,4 +10,9 @@ class FooController
     {
         Response::json(['Hello, World!']);
     }
+
+    public function show(string $message)
+    {
+        Response::plain($message);
+    }
 }

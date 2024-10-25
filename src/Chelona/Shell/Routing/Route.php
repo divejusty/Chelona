@@ -11,7 +11,7 @@ class Route
 {
     private array $params = [];
 
-    public function __construct(private readonly string $path, private readonly Action $action, private readonly RequestMethod $method)
+    public function __construct(private readonly string $path, private readonly Actionable $action, private readonly RequestMethod $method)
     {
         $params = [];
         preg_match_all('/(\{[A-z]*})/', $path, $params);
@@ -30,11 +30,11 @@ class Route
      * Creates a route for a GET request.
      *
      * @param string $path
-     * @param Action $endpoint
+     * @param Actionable $endpoint
      *
      * @return Route
      */
-    public static function get(string $path, Action $endpoint): Route
+    public static function get(string $path, Actionable $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::GET);
     }
@@ -43,11 +43,11 @@ class Route
      * Creates a route for a POST request.
      *
      * @param string $path
-     * @param Action $endpoint
+     * @param Actionable $endpoint
      *
      * @return Route
      */
-    public static function post(string $path, Action $endpoint): Route
+    public static function post(string $path, Actionable $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::POST);
     }
@@ -56,11 +56,11 @@ class Route
      * Creates a route for a PUT request.
      *
      * @param string $path
-     * @param Action $endpoint
+     * @param Actionable $endpoint
      *
      * @return Route
      */
-    public static function put(string $path, Action $endpoint): Route
+    public static function put(string $path, Actionable $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::PUT);
     }
@@ -69,11 +69,11 @@ class Route
      * Creates a route for a DELETE request.
      *
      * @param string $path
-     * @param Action $endpoint
+     * @param Actionable $endpoint
      *
      * @return Route
      */
-    public static function delete(string $path, Action $endpoint): Route
+    public static function delete(string $path, Actionable $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::DELETE);
     }
@@ -82,16 +82,16 @@ class Route
      * Creates a route for a PATCH request.
      *
      * @param string $path
-     * @param Action $endpoint
+     * @param Actionable $endpoint
      *
      * @return Route
      */
-    public static function patch(string $path, Action $endpoint): Route
+    public static function patch(string $path, Actionable $endpoint): Route
     {
         return static::createRoute($path, $endpoint, RequestMethod::PATCH);
     }
 
-    private static function createRoute(string $path, Action $action, RequestMethod $method): Route
+    private static function createRoute(string $path, Actionable $action, RequestMethod $method): Route
     {
         $route = new Route(
             $path,
@@ -136,14 +136,9 @@ class Route
     /**
      * Calls the endpoint associated with the Route.
      */
-    public function call($uri)
+    public function call(string $uri)
     {
-        if (count($this->params) > 0) {
-            $params = $this->extractParams($uri);
-            return $this->action->controller->{$this->action->method}(...$params);
-        }
-
-        return $this->action->controller->{$this->action->method}();
+        return $this->action->call($this->extractParams($uri));
     }
 
     /**

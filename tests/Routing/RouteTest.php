@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace Tests\Routing;
 
 use Chelona\Shell\Http\RequestMethod;
-use Chelona\Shell\Routing\Action;
+use Chelona\Shell\Routing\ControllerAction;
 use Chelona\Shell\Routing\Route;
 use PHPUnit\Framework\TestCase;
 use Tests\Fixtures\FooController;
 
 final class RouteTest extends TestCase
 {
-    protected Action $defaultAction;
-    protected string $defaultPath = '/foo';
+    protected ControllerAction $defaultAction;
+    protected string           $defaultPath = '/foo';
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->defaultAction = new Action(FooController::class, 'index');
+        $this->defaultAction = new ControllerAction(FooController::class, 'index');
     }
 
 	public function testGet()
@@ -58,10 +58,14 @@ final class RouteTest extends TestCase
 
     public function testParameters()
     {
-        $path = '/foo/{id}';
-        $route = Route::get($path, $this->defaultAction);
+        $path = '/foo/{message}';
+        $route = Route::get($path, new ControllerAction(FooController::class, 'show'));
         $this->assertEquals($path, $route->getPath());
         $this->assertCount(1, $route->getParameters());
-        $this->assertEquals('{id}', $route->getParameters()[2]);
+        $this->assertEquals('{message}', $route->getParameters()[2]);
+
+        $route->call('/foo/test');
+
+        $this->expectOutputString('test');
     }
 }

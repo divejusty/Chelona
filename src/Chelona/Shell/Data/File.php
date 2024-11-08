@@ -2,7 +2,7 @@
 
 namespace Chelona\Shell\Data;
 
-final class File
+class File
 {
     public static function mapOverFile(string $fileName, callable $callback): void
     {

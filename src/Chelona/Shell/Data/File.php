@@ -42,9 +42,4 @@ final class File
 
         return $output;
     }
-
-    public static function inputFile(string $fileName): string
-    {
-        return __DIR__ . '/../../Input/' . $fileName;
-    }
 }

@@ -2,7 +2,8 @@
 
 namespace Chelona\Shell\Console;
 
-final class IO {
+final class IO
+{
     public static function read(): string
     {
         return trim(fgets(STDIN));

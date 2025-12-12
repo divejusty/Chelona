@@ -4,10 +4,13 @@ namespace Chelona\Shell\Data;
 
 class File
 {
-    public static function mapOverFile(string $fileName, callable $callback): void
+    public static function mapOverFile(string $fileName, callable $callback, bool $shouldTrim = true): void
     {
         $file = fopen($fileName, 'r');
         while ($line = fgets($file)) {
+            if($shouldTrim) {
+                $line = trim($line);
+            }
             $callback($line);
         }
         fclose($file);
@@ -22,7 +25,7 @@ class File
     {
         $output = [];
         File::mapOverFile($fileName, function ($line) use (&$output) {
-            $output[] = str_split(trim($line));
+            $output[] = str_split($line);
         });
 
         return $output;
@@ -32,7 +35,7 @@ class File
     {
         $output = [];
         File::mapOverFile($fileName, function ($line) use (&$output) {
-            foreach (str_split(trim($line)) as $char) {
+            foreach (str_split($line) as $char) {
                 if (!isset($output[$char])) {
                     $output[$char] = 0;
                 }
